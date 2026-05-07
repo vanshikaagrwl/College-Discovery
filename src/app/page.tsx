@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { colleges } from "@/lib/colleges";
 import { AdmissionPrediction, CategoryType, ExamType, getAdmissionTip, predictAdmissionChance } from "@/lib/admission";
 import { useFavorites } from "@/context/FavoritesContext";
@@ -124,7 +124,7 @@ const newsData = {
   ]
 };
 
-export default function Home() {
+function HomeContent() {
   const [query, setQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
@@ -1373,5 +1373,17 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-orange-500 text-xl font-semibold animate-pulse">Loading Platform...</div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
